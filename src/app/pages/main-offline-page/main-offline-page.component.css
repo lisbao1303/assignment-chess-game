@@ -1,0 +1,96 @@
+.fullscreen-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to right, #232526, #414345);
+  color: white;
+
+}
+
+.iframes-div {
+  height: auto;
+  width: 900px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-43 {
+  border-radius: .5rem;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  display: flex;
+  font-size: 16px;
+  justify-content: center;
+  padding: 1rem 1.75rem;
+  text-decoration: none;
+  width: 130px;
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.colorStart {
+  background-image: linear-gradient(-180deg, #37AEE2 0%, #1E96C8 100%);
+}
+
+.colorStop {
+  background-image: linear-gradient(-180deg, #e7006c 0%, #ce0b46 100%);
+}
+
+.colorStart:hover {
+  background-image: linear-gradient(-180deg, #1D95C9 0%, #17759C 100%);
+}
+
+.colorStop:hover {
+  background-image: linear-gradient(-180deg, #7c1746 0%, #8a1639 100%);
+}
+
+.options {
+  display: flex;
+  width: 100%;
+  color: #eef2f3;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-input {
+  width: 100%;
+  padding: 10px 0 10px 0;
+  font-size: 16px;
+  border: 2px solid gray;
+  border-radius: 5px;
+  outline: none;
+}
+
+.my-input:focus {
+  border-color: #0056b3;
+  background-color: #f0f8ff;
+}
+
+.input-div {
+  width: 100px;
+  margin: 20px
+}
+
+.invalidTime {
+  color: #f80a51;
+}
+
+.bottom-div {
+  margin-top: 100px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+}
+
+.endGameText {
+  color: #02b60b;
+  font-size: x-large;
+}

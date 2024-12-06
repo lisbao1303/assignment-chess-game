@@ -1,0 +1,54 @@
+form {
+    /* This bit sets up the horizontal layout */
+    display:flex;
+    flex-direction:row;
+    outline: none;
+
+    /* This bit draws the box around it */
+  
+    /* I've used padding so you can see the edges of the elements. */
+    padding:1px;
+  }
+
+  input {
+    width: 100%;
+    font-size: 16px;
+    flex-grow:2;
+    border: 2px solid gray;
+    border-right: none;
+    border-start-start-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+    outline: none;
+  }
+  
+  input:focus  {
+    border-color: #0056b3;
+    background-color: #f0f8ff;
+  }
+  
+  /* Add the focus effect to the form so it contains the button */
+  form:focus-within { 
+    outline: none;
+  }  
+
+  button {
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+    box-sizing: border-box;
+    color: #ffffff;
+    display: flex;
+    background-image: linear-gradient(-180deg, #37AEE2 0%, #1E96C8 100%);
+    font-size: 16px;
+    justify-content: center;
+    padding: 1rem 1.75rem;
+    text-decoration: none;
+    width: 130px;
+    border: 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+button:hover {
+    background-image: linear-gradient(-180deg, #1D95C9 0%, #17759C 100%);
+  }

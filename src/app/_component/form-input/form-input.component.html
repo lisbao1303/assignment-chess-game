@@ -1,0 +1,10 @@
+<form (ngSubmit)="customSubmit()" #joinForm="ngForm">
+  <input
+    type="text"
+    [placeholder]="placeholder"
+    [(ngModel)]="inputValue"
+    name="input"
+    required
+  />
+  <button type="submit" >{{ buttonLabel }}</button>
+</form>

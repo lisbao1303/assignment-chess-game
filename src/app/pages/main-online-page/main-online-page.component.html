@@ -1,0 +1,26 @@
+<div class="disabledDiv" *ngIf="gameCode === ''">
+    <button class="button" (click)="createGame()" role="button">Create New Game</button>
+    <app-form-input [buttonLabel]="'Join Game'" [placeholder]="'Enter game code'"
+        (submitValue)="joinGame($event)"></app-form-input>
+    <span class="invalid"> {{gameNotFound}}</span>
+
+</div>
+<div class="fullscreen-div">
+    <div class="">
+        <h1>Game code: {{gameCode}}</h1>
+    </div>
+    <div class="board-div">
+        <div *ngIf="!matchStarted || boardDisabled" class="disabledBoard">
+            <h3 *ngIf="!matchStarted">Waiting Player 2 ...</h3>
+            <h3 *ngIf="matchStarted">{{currentTurn}} turn</h3>
+        </div>
+
+        <ngx-chess-board #board (moveChange)="updateBoard($event)" [size]="size" [darkTileColor]="darkTileColor"
+            [lightTileColor]="lightTileColor" [darkDisabled]="darkDisabled"
+            [lightDisabled]="!darkDisabled"></ngx-chess-board>
+    </div>
+    <span class="endGameText"> <b>{{endGame }}</b></span>
+    <button class="button" (click)="exitMatch()" role="button">Exit Game</button>
+
+
+</div>

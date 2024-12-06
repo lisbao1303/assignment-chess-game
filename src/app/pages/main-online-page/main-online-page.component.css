@@ -1,0 +1,71 @@
+.disabledDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1100;
+    pointer-events: all;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.fullscreen-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to right, #232526, #414345);
+    color: white;
+
+}
+
+.button {
+    border-radius: .5rem;
+    box-sizing: border-box;
+    color: #ffffff;
+    display: flex;
+    background-image: linear-gradient(-180deg, #37AEE2 0%, #1E96C8 100%);
+    font-size: 16px;
+    justify-content: center;
+    padding: 1rem 1.75rem;
+    text-decoration: none;
+    width: 160px;
+    margin: 50px;
+    border: 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button:hover {
+    background-image: linear-gradient(-180deg, #1D95C9 0%, #17759C 100%);
+}
+
+.disabledBoard {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    pointer-events: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.endGameText {
+    color: #02b60b;
+    font-size: x-large;
+    margin: 20px;
+  }
+
+  .invalid{
+    color: #f80a51;
+  }

@@ -1,0 +1,3 @@
+<div class="disabledIframe" *ngIf="iframeDisabled"></div>
+<ngx-chess-board #board (moveChange)="updateBoard($event)" [size]="size" [darkTileColor]="darkTileColor"
+    [lightTileColor]="lightTileColor" [darkDisabled]="darkDisabled" [lightDisabled]="!darkDisabled"></ngx-chess-board>

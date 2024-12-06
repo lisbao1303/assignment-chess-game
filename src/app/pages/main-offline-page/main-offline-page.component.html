@@ -1,0 +1,43 @@
+
+<div class="fullscreen-div">
+    <div class="iframes-div">
+        <!-- iframe player 1 with timer -->
+        <div>
+            <app-timer [hidden]="!timerState" #timerComponentPlayer1 (timeOut)="onGameEnd('black', endGameReason.Timeout)"></app-timer>
+            <iframe #iFrame1 src="/iframepage/1" width="400" height="400"></iframe>
+        </div>
+        <!-- iframe player 2 with timer -->
+        <div>
+            <app-timer [hidden]="!timerState" #timerComponentPlayer2 (timeOut)="onGameEnd('white', endGameReason.Timeout)"></app-timer>
+            <iframe #iFrame2 src="/iframepage/2" width="400" height="400"></iframe>
+        </div>
+    </div>
+    <div class="bottom-div">
+    <span class="endGameText" > <b>{{endGame }}</b></span>
+
+        <div class="options">
+            <!-- timer config -->
+            <app-toggle-button [gameisRunning]="gameisRunning" [isOn]="timerState" (toggle)="timerStateToggle($event)"></app-toggle-button>
+            Time Control {{this.timerState? "ON" : "OFF"}}
+            <div class="input-div">
+                <label for="time">Total :</label>
+                <input [disabled]="!timerState||gameisRunning" class="my-input" id="time" name="time" type="text"
+                    placeholder="mm:ss" appTimeMask [(ngModel)]="initialTime">
+            </div>
+            |
+            <div class="input-div">
+                <label for="increment">Increment:</label>
+                <input [disabled]="!timerState || gameisRunning" class="my-input" id="increment" name="increment"
+                    type="text" placeholder="mm:ss" appTimeMask [(ngModel)]="incrementTime">
+            </div>
+            <!-- options start and stop game  -->
+            <button class="button-43 colorStart" *ngIf="!gameisRunning" (click)="resetBoards()" role="button">Start New
+                Game</button>
+            <button class="button-43 colorStop" *ngIf="gameisRunning" (click)="stopGame()" role="button">Stop Game</button>
+        </div>
+        <span class="invalidTime" *ngIf="invalidTime"> Enter a valid time to start the game!</span>
+
+    </div>
+    
+
+</div>
