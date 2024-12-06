@@ -9,7 +9,10 @@
   color: white;
 
 }
-
+iframe {
+  overflow: hidden;
+  border: none;
+}
 .iframes-div {
   height: auto;
   width: 900px;

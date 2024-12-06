@@ -4,12 +4,12 @@
         <!-- iframe player 1 with timer -->
         <div>
             <app-timer [hidden]="!timerState" #timerComponentPlayer1 (timeOut)="onGameEnd('black', endGameReason.Timeout)"></app-timer>
-            <iframe #iFrame1 src="/iframepage/1" width="400" height="400"></iframe>
+            <iframe scrolling="no" #iFrame1 src="/iframepage/1" width="400" height="400"></iframe>
         </div>
         <!-- iframe player 2 with timer -->
         <div>
             <app-timer [hidden]="!timerState" #timerComponentPlayer2 (timeOut)="onGameEnd('white', endGameReason.Timeout)"></app-timer>
-            <iframe #iFrame2 src="/iframepage/2" width="400" height="400"></iframe>
+            <iframe scrolling="no" #iFrame2 src="/iframepage/2" width="400" height="400"></iframe>
         </div>
     </div>
     <div class="bottom-div">
