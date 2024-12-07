@@ -155,7 +155,7 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
   //exit match
   @HostListener('window:beforeunload', ['$event'])
   public exitMatch(): void {
-    if (this.gameCode) {
+    if (this.gameCode !== '') {
       const gameCodeToRemove = this.gameCode;
       this.makeMove('', 'endgame');
       this.onlineGameService.removeGameByCode(gameCodeToRemove).subscribe({
