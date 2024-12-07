@@ -61,7 +61,7 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
   public createGame(): void {
     this.gameNotFound = '';
     const startingPlayer = 'Player1';
-    
+
     this.onlineGameService.createGame(startingPlayer).subscribe({
       next: (gameCode) => {
         this.gameCode = gameCode;
@@ -155,12 +155,14 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
   //exit match
   @HostListener('window:beforeunload', ['$event'])
   public exitMatch(): void {
-    const gameCodeToRemove = this.gameCode;
-    this.makeMove('', 'endgame');
-    this.onlineGameService.removeGameByCode(gameCodeToRemove).subscribe({
-      next: () => this.resetBoard(),
-      error: (err) => console.error('Erro ao sair do jogo:', err)
-    });
+    if (this.gameCode) {
+      const gameCodeToRemove = this.gameCode;
+      this.makeMove('', 'endgame');
+      this.onlineGameService.removeGameByCode(gameCodeToRemove).subscribe({
+        next: () => this.resetBoard(),
+        error: (err) => console.error('Erro ao sair do jogo:', err)
+      });
+    }
   }
 
   private resetBoard(): void {
