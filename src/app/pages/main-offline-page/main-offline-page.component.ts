@@ -1,5 +1,4 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TimerComponent } from 'src/app/_component/timer/timer.component';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
@@ -42,16 +41,15 @@ export class MainOfflinePageComponent implements OnInit, OnDestroy {
   constructor(
     private messageService: PostMessageService,
     private localStorageService: LocalStorageService,
-    private router: Router
   ) { }
 
   ngOnInit(): void {
     this.messageSubscription = this.subscribePostMessage();
-    this.saveStateOnChangeRoute();
   }
 
   ngOnDestroy(): void {
     this.messageSubscription.unsubscribe();
+    this.saveState();
   }
 
   // Load App State logic
@@ -101,18 +99,6 @@ export class MainOfflinePageComponent implements OnInit, OnDestroy {
       this.saveTimerStats();
       this.localStorageService.saveState("chessOfflineState", this.appState);
     }
-  }
-
-  // Save State on change route
-  saveStateOnChangeRoute() {
-    // Listen for route changes
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        if (event.url !== "/mainpage") {
-          this.saveState();
-        }
-      }
-    });
   }
 
   // Save State on close window logic (Save timer stats if exists)

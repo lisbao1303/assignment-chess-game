@@ -1,5 +1,4 @@
 import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
 import { NgxChessBoardComponent } from 'ngx-chess-board';
 import { OnlineGameService } from 'src/app/services/online-game.service';
 
@@ -26,12 +25,10 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
 
   constructor(
     private onlineGameService: OnlineGameService,
-    private router: Router
   ) { }
 
 
   ngOnInit(): void {
-    this.handleExitRouteChanges();
   }
 
   ngOnDestroy(): void {
@@ -158,19 +155,11 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
   //exit match
   @HostListener('window:beforeunload', ['$event'])
   public exitMatch(): void {
+    const gameCodeToRemove = this.gameCode;
     this.makeMove('', 'endgame');
-    this.onlineGameService.removeGameByCode(this.gameCode).subscribe({
+    this.onlineGameService.removeGameByCode(gameCodeToRemove).subscribe({
       next: () => this.resetBoard(),
       error: (err) => console.error('Erro ao sair do jogo:', err)
-    });
-  }
-
-  // Listen for route changes
-  private handleExitRouteChanges(): void {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd && event.url !== '/onlineGame') {
-        this.exitMatch();
-      }
     });
   }
 
@@ -180,6 +169,4 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
     this.boardManager.reset();
     this.matchStarted = false;
   }
-
-
 }
