@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Database, ref, set, update, onValue, get, DataSnapshot, remove } from '@angular/fire/database';
+import { Database, ref, set, update, onValue, get, DataSnapshot, remove, runTransaction } from '@angular/fire/database';
 import { Observable, BehaviorSubject, from, map, switchMap } from 'rxjs';
 
 @Injectable({
@@ -11,13 +11,13 @@ export class OnlineGameService {
   constructor(private db: Database) {}
 
   // Observable to create a new game
-  createGame(currentTurn:string): Observable<string> {
+  createGame(hostStartsWith:string): Observable<string> {
     const gameCode = Math.random().toString(36).substring(2, 8); 
     const gameRef = ref(this.db, `games/${gameCode}`);
     return from(set(gameRef, {
-      player1: 'Player1',
+      hostStartsWith: hostStartsWith,
       nextMove: '', 
-      currentTurn: currentTurn,
+      currentTurn: 'white',
       gameStatus: 'ongoing'
     })).pipe( // pipe at the return of set() return gamecode
       map(() => {
@@ -29,7 +29,7 @@ export class OnlineGameService {
   // Observable to Join a game and get initial data
   joinGame(gameCode: string): Observable<any> {
     const gameRef = ref(this.db, `games/${gameCode}`);
-    return from(update(gameRef, { player2: 'Player2' })).pipe(
+    return from(update(gameRef, { matchmaking: true })).pipe(
       switchMap(() => from(get(gameRef).then((snapshot) => snapshot.val())))  //pass to get observable
     );
   }

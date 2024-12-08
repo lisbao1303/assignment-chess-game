@@ -60,13 +60,13 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
   //Create a new game 
   public createGame(): void {
     this.gameNotFound = '';
-    const startingPlayer = 'Player1';
+    const startingColor = 'white';
 
-    this.onlineGameService.createGame(startingPlayer).subscribe({
+    this.onlineGameService.createGame(startingColor).subscribe({
       next: (gameCode) => {
         this.gameCode = gameCode;
         this.listenToUpdates();
-        startingPlayer === 'Player1' ? this.startAsWhite() : this.startAsBlack();
+        startingColor === 'white' ? this.startAsWhite() : this.startAsBlack();
       },
       error: (err) => console.error('Error at create a new game :', err)
     });
@@ -83,7 +83,7 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
 
   //handle updates
   private handleGameUpdates(gameData: any): void {
-    if (!this.matchStarted && gameData.player2) {
+    if (!this.matchStarted && gameData.matchmaking) {
       this.matchStarted = true;
       this.currentTurn = 'white';
     }
@@ -117,10 +117,11 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
   public joinGame(gameCode: string): void {
     this.onlineGameService.joinGame(gameCode).subscribe({
       next: (messageEvent) => {
-        if (messageEvent.currentTurn) {
+        console.log(messageEvent)
+        if (messageEvent.hostStartsWith) {
           this.gameCode = gameCode;
           this.gameNotFound = "";
-          messageEvent.currentTurn === "Player1" ? this.startAsBlack() : this.startAsWhite()
+          messageEvent.hostStartsWith === "white" ? this.startAsBlack() : this.startAsWhite()
           this.listenToUpdates();
         } else {
           this.gameNotFound = "Game not Found!";
