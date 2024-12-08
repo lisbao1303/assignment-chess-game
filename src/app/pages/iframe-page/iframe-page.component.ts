@@ -13,6 +13,7 @@ export class IframePageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('board', { static: false }) boardManager!: NgxChessBoardComponent;
 
   private messageSubscription!: Subscription;
+  private routeSubscription!: Subscription;
   private indexPlayer: string | null = '1';
   private initialLoading: boolean = false;
 
@@ -36,11 +37,12 @@ export class IframePageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.messageSubscription?.unsubscribe();
+    this.messageSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 
   private subscribeToRouteParams(): void {
-    this.route.paramMap.subscribe((params) => {
+    this.routeSubscription = this.route.paramMap.subscribe((params) => {
       this.indexPlayer = params.get('index');
       this.setBoardOrientation();
     });

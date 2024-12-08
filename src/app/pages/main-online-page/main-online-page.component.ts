@@ -1,5 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgxChessBoardComponent } from 'ngx-chess-board';
+import { Subject, takeUntil } from 'rxjs';
 import { OnlineGameService } from 'src/app/services/online-game.service';
 
 @Component({
@@ -9,6 +10,9 @@ import { OnlineGameService } from 'src/app/services/online-game.service';
 })
 export class MainOnlinePageComponent implements OnInit, OnDestroy {
   @ViewChild('board', { static: false }) boardManager!: NgxChessBoardComponent;
+
+  // Subject to cancel all subscriptions
+  private destroy$ = new Subject<void>();
 
   public matchStarted = false;
   public boardDisabled = true;
@@ -33,6 +37,8 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.exitMatch();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   //Update board move
@@ -46,14 +52,16 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
 
   // do a move e updates turn
   private makeMove(move: string, gameStatus: string): void {
-    this.onlineGameService.makeMove(this.gameCode, move, this.playerColor, gameStatus).subscribe({
-      next: () => {
-        if (gameStatus === 'ongoing') {
-          this.startOpponentTurn();
-        }
-      },
-      error: (err) => console.error('Erro ao realizar movimento:', err)
-    });
+    this.onlineGameService.makeMove(this.gameCode, move, this.playerColor, gameStatus)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          if (gameStatus === 'ongoing') {
+            this.startOpponentTurn();
+          }
+        },
+        error: (err) => console.error('Erro ao realizar movimento:', err)
+      });
   }
 
 
@@ -62,23 +70,27 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
     this.gameNotFound = '';
     const startingColor = 'white';
 
-    this.onlineGameService.createGame(startingColor).subscribe({
-      next: (gameCode) => {
-        this.gameCode = gameCode;
-        this.listenToUpdates();
-        startingColor === 'white' ? this.startAsWhite() : this.startAsBlack();
-      },
-      error: (err) => console.error('Error at create a new game :', err)
-    });
+    this.onlineGameService.createGame(startingColor)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (gameCode) => {
+          this.gameCode = gameCode;
+          this.listenToUpdates();
+          startingColor === 'white' ? this.startAsWhite() : this.startAsBlack();
+        },
+        error: (err) => console.error('Error at create a new game :', err)
+      });
   }
 
   // Subscribes on game updates
   private listenToUpdates() {
-    this.onlineGameService.listenToGameUpdates(this.gameCode).subscribe((gameData) => {
-      if (gameData) {
-        this.handleGameUpdates(gameData);
-      }
-    });
+    this.onlineGameService.listenToGameUpdates(this.gameCode)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((gameData) => {
+        if (gameData) {
+          this.handleGameUpdates(gameData);
+        }
+      });
   }
 
   //handle updates
@@ -115,20 +127,21 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
 
   //Join a Game logic
   public joinGame(gameCode: string): void {
-    this.onlineGameService.joinGame(gameCode).subscribe({
-      next: (messageEvent) => {
-        console.log(messageEvent)
-        if (messageEvent.hostStartsWith) {
-          this.gameCode = gameCode;
-          this.gameNotFound = "";
-          messageEvent.hostStartsWith === "white" ? this.startAsBlack() : this.startAsWhite()
-          this.listenToUpdates();
-        } else {
-          this.gameNotFound = "Game not Found!";
-        }
-      },
-      error: (err) => console.error('Erro to join game:', err),
-    });
+    this.onlineGameService.joinGame(gameCode)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (messageEvent) => {
+          if (messageEvent.hostStartsWith) {
+            this.gameCode = gameCode;
+            this.gameNotFound = "";
+            messageEvent.hostStartsWith === "white" ? this.startAsBlack() : this.startAsWhite()
+            this.listenToUpdates();
+          } else {
+            this.gameNotFound = "Game not Found!";
+          }
+        },
+        error: (err) => console.error('Erro to join game:', err),
+      });
   }
 
   private startAsBlack() {
@@ -159,10 +172,12 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
     if (this.gameCode !== '') {
       const gameCodeToRemove = this.gameCode;
       this.makeMove('', 'endgame');
-      this.onlineGameService.removeGameByCode(gameCodeToRemove).subscribe({
-        next: () => this.resetBoard(),
-        error: (err) => console.error('Erro ao sair do jogo:', err)
-      });
+      this.onlineGameService.removeGameByCode(gameCodeToRemove)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => this.resetBoard(),
+          error: (err) => console.error('Erro ao sair do jogo:', err)
+        });
     }
   }
 
