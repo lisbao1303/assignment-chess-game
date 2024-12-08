@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Database, ref, set, update, onValue, get, DataSnapshot, remove, runTransaction } from '@angular/fire/database';
-import { Observable, BehaviorSubject, from, map, switchMap } from 'rxjs';
+import { Database, ref, set, update, onValue, get,  remove } from '@angular/fire/database';
+import { Observable, BehaviorSubject, from, map, switchMap, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +29,16 @@ export class OnlineGameService {
   // Observable to Join a game and get initial data
   joinGame(gameCode: string): Observable<any> {
     const gameRef = ref(this.db, `games/${gameCode}`);
-    return from(update(gameRef, { matchmaking: true })).pipe(
-      switchMap(() => from(get(gameRef).then((snapshot) => snapshot.val())))  //pass to get observable
+    return from(get(gameRef).then((snapshot) => snapshot.val())).pipe(
+      switchMap((initialData) => {
+        if (initialData !== null) {
+          return from(update(gameRef, { matchmaking: true })).pipe(
+            switchMap(() => of(initialData)) // Return initialData get after update
+          );
+        } else {
+          return of(null); // Retorna `null` 
+        }
+      })
     );
   }
 
@@ -57,3 +65,4 @@ export class OnlineGameService {
     return from(remove(gameRef));
   }
 }
+

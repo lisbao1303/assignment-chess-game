@@ -131,7 +131,7 @@ export class MainOnlinePageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (messageEvent) => {
-          if (messageEvent.hostStartsWith) {
+          if (messageEvent) {
             this.gameCode = gameCode;
             this.gameNotFound = "";
             messageEvent.hostStartsWith === "white" ? this.startAsBlack() : this.startAsWhite()
